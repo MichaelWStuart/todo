@@ -1,0 +1,37 @@
+<% include ./partials/header %>
+
+<div id='container'>
+  <div id='head'>
+    <form class='title'>
+      <input type='text' value='TODO LIST'>
+    </form>
+    <div class='dropdown'>
+      <button type="button" class="btn btn-default btn-lg dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+        <span class="glyphicon glyphicon-menu-hamburger"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class='save' href="#">Save</a></li>
+        <li><a class='load' href="#">Load</a></li>
+      </ul>
+    </div>
+  </div>
+  <form class='new' action='/todos' method='POST'>
+    <input type="text" name='todo[content]' placeholder="Add New Todo">
+  </form>
+
+  <ul class='items'>
+    <% todos.forEach(function(todo){ %>
+
+      <li class='item'>
+        <form action='/todos/<%= todo._id %>?_method=DELETE' method='POST'>
+          <button type='submit' class="fabutton">
+            <i class="fa fa-trash"></i>
+          </button>
+          <span id='<%= todo._id %>' class='<%= todo.complete ? 'complete' : '' %>' data-completed='<%= todo.complete %>'><%= todo.content %></span>
+        </form>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+<% include ./partials/footer %>

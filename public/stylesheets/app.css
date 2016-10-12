@@ -1,0 +1,132 @@
+body {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.title {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.title input {
+  color: #F7F7F7;
+  font-size: 23px;
+  font-weight: normal;
+  background: #202020;
+  padding: 10px 13px 3px 13px;
+  border: 1px solid #202020;
+}
+
+.title input:focus {
+  font-family: 'Orbitron', sans-serif;
+  background: #202020;
+  border: 1px solid #202020;
+  outline: none;
+}
+
+.btn {
+  background-color: #202020;
+  border: none;
+}
+
+.btn:focus {
+  background-color: #202020;
+  outline: none;
+}
+
+.btn:hover {
+  background-color: #202020;
+}
+
+.btn:active:focus {
+  background-color: #202020;
+  outline: none;
+}
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  height: 40px;
+  line-height: 40px;
+  color: #666;
+}
+
+.item:nth-child(odd) {
+   background-color: white;
+}
+
+form {
+  margin-bottom: 0;
+}
+
+.new input {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 15px;
+  background: #F7F7F7;
+  width: 100%;
+  padding: 14px 13px 10px 13px;
+  border: 1px solid #F7F7F7;
+}
+
+.new input:focus {
+  font-family: 'Orbitron', sans-serif;
+  background: #F7F7F7;
+  border: 1px solid #F7F7F7;
+  outline: none;
+}
+
+.fabutton {
+  background: none;
+  padding: 0px;
+  border: none;
+  margin: 0px 2px 0px 9px;
+}
+
+.fa {
+  display: none;
+}
+
+.item:hover .fa{
+display : inline-block;
+cursor: pointer;
+}
+
+.complete {
+  text-decoration: line-through;
+}
+
+.glyphicon {
+  padding-bottom: 10px:
+}
+
+#container {
+  width: 500px;
+  margin: 100px auto;
+  background: #F7F7F7;
+}
+
+#head {
+  background: #202020;
+}
+
+.glyphicon {
+  color: #F7F7F7;
+}
+
+.dropdown {
+  display: inline-block;
+  float: right;
+  margin: 4px 2px 2px 3px;
+}
+
+.dropdown-menu li {
+  color: #666;
+  float: left;
+  width: 50%;
+
+
+}
