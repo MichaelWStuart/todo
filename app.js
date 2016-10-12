@@ -8,7 +8,7 @@ var methodOverride = require('method-override'),
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
-mongoose.connect('mongodb://localhost/todo');
+mongoose.connect('mongodb://miwst:miwst@ds023074.mlab.com:23074/todo');
 app.use(methodOverride('_method'));
 app.use(morgan('combined'));
 
@@ -19,6 +19,12 @@ var TodoSchema = new mongoose.Schema({
 });
 
 var Todo = mongoose.model('Todo', TodoSchema);
+
+var ListSchema = new mongoose.Schema({
+    listTitle: String
+});
+
+var List = mongoose.model('List', ListSchema);
 
 app.get('/',function(req,res){
     Todo.find({}, function(err,allTodos){
@@ -60,6 +66,7 @@ app.put('/todos/:id', function(req, res) {
   });
 });
 
-app.listen(3000, function(){
+app.set('port', (process.env.PORT || 3000));
+app.listen(app.get('port'), function(){
     console.log("serve's up fool");
 });
