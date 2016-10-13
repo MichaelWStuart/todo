@@ -1,50 +1,59 @@
 <% include ./partials/header %>
 
-<div id='container'>
-  <div id='head'>
-    <form class='title'>
-      <input type='text' value='TODO LIST'>
-    </form>
-    <div class='dropdown'>
-      <button type="button" class="btn btn-default btn-lg dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+    <div id='container'>
+        <div id='head'>
+            <form class='title'>
+                <input type='text' value='TODO LIST'>
+            </form>
+            <div class='dropdown'>
+                <button type="button" class="btn btn-default btn-lg dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
         <span class="glyphicon glyphicon-menu-hamburger"></span>
       </button>
-      <ul class="dropdown-menu">
-        <li class='loadrow'>
-          <a class='load' href="#">Load</a>
-          <a class='save' href="#">Save</a>
-        </li>
-        <li class='loadclass'>
-          <ul>
-          <hr class='hr'>
-        <% for(let i = 1; i < 11; i++) { %>
-          <li><a href="#"><%= (lists[lists.length - i]).listTitle %></a></li>
-        <% } %>
-        <% if (lists.length > 10) { %>
-          <li><hr class='hr'></li>
-          <li><a href="#">More</a></li>
-        <% } %>
-      </ul>
-      </li>
-      </ul>
-    </div>
-  </div>
-  <form class='new' action='/todos' method='POST'>
-    <input type="text" name='todo[content]' placeholder="Add New Todo">
-  </form>
+                <ul class="dropdown-menu">
+                    <li class='save'>
+                        <a class='save' href="#">Save</a>
+                    </li>
+                    <li class='load'>
+                        <a class='load' href="#">Load</a>
+                        <ul>
+                            <li>
+                                <hr class='hr'>
+                            </li>
+                            <% for(let i = 1; i < lists.length; i++) { %>
+                                <li>
+                                    <a href="#">
+                                        <%= lists[i].listTitle %>
+                                    </a>
+                                </li>
+                                <% } %>
+                                    <% if (lists.length > 10) { %>
+                                        <li>
+                                            <hr class='hr'>
+                                        </li>
+                                        <li><a href="#">More</a></li>
+                                        <% } %>
+                        </ul>
+                    </li>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form class='new' action='/todos' method='POST'>
+            <input type="text" name='todo[content]' placeholder="Add New Todo">
+        </form>
 
-  <ul class='items'>
-    <% todos.forEach(function(todo){ %>
-      <li class='item'>
-        <form action='/todos/<%= todo._id %>?_method=DELETE' method='POST'>
-          <button type='submit' class="fabutton">
+        <ul class='items'>
+            <% todos.forEach(function(todo){ %>
+                <li class='item'>
+                    <form action='/todos/<%= todo._id %>?_method=DELETE' method='POST'>
+                        <button type='submit' class="fabutton">
             <i class="fa fa-trash"></i>
           </button>
-          <span id='<%= todo._id %>' class='<%= todo.complete ? 'complete' : '' %>' data-completed='<%= todo.complete %>'><%= todo.content %></span>
-        </form>
-      </li>
-    <% }); %>
-  </ul>
-</div>
+                        <span id='<%= todo._id %>' class='<%= todo.complete ? ' complete ' : ' ' %>' data-completed='<%= todo.complete %>'><%= todo.content %></span>
+                    </form>
+                </li>
+                <% }); %>
+        </ul>
+    </div>
 
-<% include ./partials/footer %>
+    <% include ./partials/footer %>
