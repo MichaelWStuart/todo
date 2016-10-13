@@ -2,15 +2,17 @@ var methodOverride = require('method-override'),
     bodyParser     = require('body-parser'),
     mongoose       = require('mongoose'),
     morgan         = require('morgan'),
+    dotenv         = require('dotenv').config(),
     express        = require('express'),
     app            = express();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
-mongoose.connect('mongodb://miwst:miwst@ds023074.mlab.com:23074/todo');
 app.use(methodOverride('_method'));
 app.use(morgan('combined'));
+
+mongoose.connect(process.env.mongo)
 
 var TodoSchema = new mongoose.Schema({
     content: String,
