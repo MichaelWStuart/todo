@@ -7,8 +7,10 @@ var methodOverride = require('method-override'),
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
-  mongoose.connect(process.env.MONGO);
+
 };
+
+mongoose.connect(process.env.MONGO);
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
