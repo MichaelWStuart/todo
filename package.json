@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "node": "6.4.0"
+},
   "scripts": {
     "start": "node app.js"
   },
@@ -10,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "bootstrap": "^3.3.7",
     "dotenv": "^2.0.0",
     "ejs": "^2.5.2",
     "express": "^4.14.0",
