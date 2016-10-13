@@ -10,8 +10,22 @@
         <span class="glyphicon glyphicon-menu-hamburger"></span>
       </button>
       <ul class="dropdown-menu">
-        <li><a class='save' href="#">Save</a></li>
-        <li><a class='load' href="#">Load</a></li>
+        <li class='loadrow'>
+          <a class='load' href="#">Load</a>
+          <a class='save' href="#">Save</a>
+        </li>
+        <li class='loadclass'>
+          <ul>
+          <hr class='hr'>
+        <% for(let i = 1; i < 11; i++) { %>
+          <li><a href="#"><%= (lists[lists.length - i]).listTitle %></a></li>
+        <% } %>
+        <% if (lists.length > 10) { %>
+          <li><hr class='hr'></li>
+          <li><a href="#">More</a></li>
+        <% } %>
+      </ul>
+      </li>
       </ul>
     </div>
   </div>
@@ -21,7 +35,6 @@
 
   <ul class='items'>
     <% todos.forEach(function(todo){ %>
-
       <li class='item'>
         <form action='/todos/<%= todo._id %>?_method=DELETE' method='POST'>
           <button type='submit' class="fabutton">

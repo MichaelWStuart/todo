@@ -1,5 +1,4 @@
 $(function() {
-
   let title = 'TODO LIST';
 
   $('.item span').on('click', function() {
@@ -21,7 +20,15 @@ $(function() {
   });
 
   $('.save').on('click', function() {
-    alert(`The title is now: ${title}`)
+    $.ajax({
+      url: '/list',
+      method: 'POST',
+      data: {title: $('.title input').val()}
+    })
+       .done(function() {
+         window.location.reload();
+         console.log('saved');
+      });
   });
 
 });

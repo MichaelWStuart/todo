@@ -7,6 +7,7 @@ var methodOverride = require('method-override'),
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
+  mongoose.connect(process.env.MONGO);
 };
 
 app.set('view engine', 'ejs');
@@ -14,8 +15,6 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(morgan('combined'));
-
-mongoose.connect(process.env.MONGO)
 
 var TodoSchema = new mongoose.Schema({
     content: String,
@@ -36,7 +35,13 @@ app.get('/',function(req,res){
         if (err) {
             console.log(err);
         } else {
-            res.render('index', {todos: allTodos});
+            List.find({}, function(err,allLists){
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.render('index', {lists: allLists, todos: allTodos});
+              }
+          });
         }
     });
 });
@@ -70,6 +75,16 @@ app.put('/todos/:id', function(req, res) {
     }
   });
 });
+
+app.post('/list', function(req, res) {
+  List.create({listTitle: req.body.title}, function(err, list) {
+    if(err){
+      console.log(err);
+    } else {
+      res.send(list);
+    }
+  })
+})
 
 app.set('port', (process.env.PORT || 3000));
 app.listen(app.get('port'), function(){
