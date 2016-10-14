@@ -1,9 +1,10 @@
 $(function() {
   let title = 'TODO LIST';
 
-  $('.item span').on('click', function() {
+  $('.todo.item span').on('click', function(event) {
+    event.preventDefault();
     const todoID = this.id;
-    const newStatus = !(JSON.parse($(this).data('completed')));
+    const newStatus = !($(this).hasClass('complete'));
     const $listSpan = $(this);
     $.ajax({
       url: `/todos/${todoID}`,
@@ -11,7 +12,7 @@ $(function() {
       data: {complete: newStatus}
     })
     .done(function(response) {
-      $listSpan.toggleClass('complete');
+      $listSpan.toggleClass('complete', !response.complete);
     });
   });
 
@@ -19,7 +20,9 @@ $(function() {
     title = $('.title input').val();
   });
 
-  $('.save').on('click', function() {
+  $('.save').on('click', function(event) {
+      console.log('asd');
+     event.preventDefault();
     $.ajax({
       url: '/list',
       method: 'POST',

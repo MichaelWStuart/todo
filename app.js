@@ -12,27 +12,47 @@ if (process.env.NODE_ENV !== 'production') {
 
 mongoose.connect(process.env.MONGO);
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(morgan('combined'));
 
-var TodoSchema = new mongoose.Schema({
+var todoSchema = new mongoose.Schema({
     content: String,
-    created: {type: Date, default: Date.now},
     complete: {type: Boolean, default: false}
 });
 
-var Todo = mongoose.model('Todo', TodoSchema);
+var Todo = mongoose.model('Todo', todoSchema);
 
-var ListSchema = new mongoose.Schema({
-    listTitle: String
+var listSchema = new mongoose.Schema({
+    listTitle: String,
+    todos: [todoSchema]
 });
 
-var List = mongoose.model('List', ListSchema);
+var List = mongoose.model('List', listSchema);
 
-app.get('/',function(req,res){
+app.get('/', function(req, res){
+    List.find({}, function(err,allLists){
+        if (err) {
+            console.log(err);
+        } else {
+            res.render('new', {lists: allLists});
+        }
+    });
+});
+
+app.post('/index/:id', function(req, res){
+    List.create(req.body.list.todo, function(err, newList){
+        if(err) {
+            console.log(err);
+        } else {
+            res.render('show', {list: newList});
+        }
+    });
+});
+
+app.get('/index/',function(req,res){
     Todo.find({}, function(err,allTodos){
         if (err) {
             console.log(err);
@@ -41,9 +61,9 @@ app.get('/',function(req,res){
                 if (err) {
                     console.log(err);
                 } else {
-                    res.render('index', {lists: allLists, todos: allTodos});
-              }
-          });
+                    res.render('show', {lists: allLists, todos: allTodos});
+                }
+            });
         }
     });
 });
@@ -68,15 +88,15 @@ app.delete('/todos/:id', function(req, res){
   });
 });
 
-// app.delete('/lists/:id', function(req, res){
-//   List.findByIdAndRemove(req.params.id, function(err){
-//     if(err){
-//       console.log(err);
-//     } else {
-//       res.redirect('/');
-//     }
-//   });
-// });
+app.delete('/lists/:id', function(req, res){
+  List.findByIdAndRemove(req.params.id, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      res.redirect('/');
+    }
+  });
+});
 
 app.put('/todos/:id', function(req, res) {
   Todo.findByIdAndUpdate(req.params.id, { $set: {complete: JSON.parse(req.body.complete)}}, function(err, todo){
