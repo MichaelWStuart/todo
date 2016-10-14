@@ -68,6 +68,16 @@ app.delete('/todos/:id', function(req, res){
   });
 });
 
+// app.delete('/lists/:id', function(req, res){
+//   List.findByIdAndRemove(req.params.id, function(err){
+//     if(err){
+//       console.log(err);
+//     } else {
+//       res.redirect('/');
+//     }
+//   });
+// });
+
 app.put('/todos/:id', function(req, res) {
   Todo.findByIdAndUpdate(req.params.id, { $set: {complete: JSON.parse(req.body.complete)}}, function(err, todo){
     if(err){
