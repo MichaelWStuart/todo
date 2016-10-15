@@ -2,7 +2,7 @@ doctype html
 html
 	include ./partials/header
 	body
-		script(src="/javascripts/show.js" charset="utf-8")
+		script(src="/javascripts/index.js" charset="utf-8")
 		#container
 			#head
 				form.title
@@ -24,12 +24,6 @@ html
 												button.fabutton(type='submit')
 													i.fa.fa-trash
 												a(href='#')= lists[lists.length - i].listTitle
-			form.new(action='/todos' method='POST')
+			form.new
 				input(type='text' name='todo[content]' placeholder='Add New Todo')
 			ul.items
-				each todo in list.todos
-					li.todo.item
-						form(action=`/todos/${todo._id}?_method=DELETE` method='POST')
-							button.fabutton(type='submit')
-								i.fa.fa-trash
-							span(id=(todo._id) class=(todo.complete ? "complete" : "") )= todo.content

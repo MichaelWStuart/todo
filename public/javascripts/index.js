@@ -1,37 +1,36 @@
 $(function() {
-  let title = 'TODO LIST';
 
-  $('.todo.item span').on('click', function(event) {
+  const handleDeleteTodo = (event) => {
     event.preventDefault();
-    const todoID = this.id;
-    const newStatus = !($(this).hasClass('complete'));
-    const $listSpan = $(this);
+    $(event.target).parent('li.todo').remove();
+  };
+
+  $('form.new').on('submit', function(event) {
+    event.preventDefault();
+    const todoText = $(event.target).find('input').val();
+    const todo = `<li class='todo item'><form><button class='fabutton delete'><i class='fa fa-trash'></i></button><span>${todoText}</span></form></li>`;
+    const $ul = $('ul.items');
+    $ul.append(todo);
+    const deleteButton = $ul.find('.todo form');
+    deleteButton.on('submit', handleDeleteTodo);
+  });
+
+  $('.save').on('click', function(event){
+    event.preventDefault();
+    const todos = []
+    $('.todo').each(function(index){
+      todos.push({content: $(this).find('span').text()});
+    });
     $.ajax({
-      url: `/todos/${todoID}`,
-      method: 'PUT',
-      data: {complete: newStatus}
+      url: '/lists',
+      method: 'POST',
+      data: {
+        listTitle: $('.title input').val(),
+        todos: todos
+      }
     })
-    .done(function(response) {
-      $listSpan.toggleClass('complete', !response.complete);
+    .done(function(response){
+      window.location.href = `/lists/${response}`;
     });
   });
-
-  $('.title input').blur(function() {
-    title = $('.title input').val();
-  });
-
-  $('.save').on('click', function(event) {
-      console.log('asd');
-     event.preventDefault();
-    $.ajax({
-      url: '/list',
-      method: 'POST',
-      data: {title: $('.title input').val()}
-    })
-       .done(function() {
-         window.location.reload();
-         console.log('saved');
-      });
-  });
-
 });

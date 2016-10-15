@@ -7,7 +7,6 @@ var methodOverride = require('method-override'),
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
-
 };
 
 mongoose.connect(process.env.MONGO);
@@ -17,6 +16,10 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(morgan('combined'));
+
+
+/////////////////////SCHEMAS////////////////////
+
 
 var todoSchema = new mongoose.Schema({
     content: String,
@@ -32,91 +35,73 @@ var listSchema = new mongoose.Schema({
 
 var List = mongoose.model('List', listSchema);
 
+
+////////////////////ROUTES////////////////////
+
+
+//Blank list
+
 app.get('/', function(req, res){
-    List.find({}, function(err,allLists){
-        if (err) {
-            console.log(err);
-        } else {
-            res.render('new', {lists: allLists});
-        }
-    });
-});
-
-app.post('/index/:id', function(req, res){
-    List.create(req.body.list.todo, function(err, newList){
-        if(err) {
-            console.log(err);
-        } else {
-            res.render('show', {list: newList});
-        }
-    });
-});
-
-app.get('/index/',function(req,res){
-    Todo.find({}, function(err,allTodos){
-        if (err) {
-            console.log(err);
-        } else {
-            List.find({}, function(err,allLists){
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.render('show', {lists: allLists, todos: allTodos});
-                }
-            });
-        }
-    });
-});
-
-app.post('/todos', function(req, res){
-    Todo.create(req.body.todo, function(err, newTodo){
-        if(err) {
-          console.log(err);
-        } else {
-          res.redirect('/')
-        }
-    });
-});
-
-app.delete('/todos/:id', function(req, res){
-  Todo.findByIdAndRemove(req.params.id, function(err){
+  List.find({}, function(err,allLists){
     if(err){
       console.log(err);
-    } else {
-      res.redirect('/');
+    } else{
+      res.render('index', {lists: allLists});
     }
   });
 });
 
-app.delete('/lists/:id', function(req, res){
-  List.findByIdAndRemove(req.params.id, function(err){
+//Make todo
+
+app.post('/lists/:id/todos', function(req, res){
+  List.create(req.body.list, function(err, newList){
     if(err){
       console.log(err);
-    } else {
-      res.redirect('/');
+    } else{
+      newList.todos.push(req.body.list.todo);
+      newList.save();
+      res.redirect(`/lists/${req.params.id}`);
     }
   });
 });
 
-app.put('/todos/:id', function(req, res) {
-  Todo.findByIdAndUpdate(req.params.id, { $set: {complete: JSON.parse(req.body.complete)}}, function(err, todo){
-    if(err){
-      console.log(err);
-    } else {
-      res.send(todo);
-    }
-  });
-});
+//Save list
 
-app.post('/list', function(req, res) {
-  List.create({listTitle: req.body.title}, function(err, list) {
+app.post('/lists', function(req, res){
+  List.create(req.body, function(err, newList){
     if(err){
       console.log(err);
-    } else {
-      res.send(list);
+    } else{
+      console.log(newList);
+      res.send(newList._id)
     }
   })
-})
+});
+
+//Show list
+
+app.get('/lists/:id', function(req, res){
+  List.findById(req.params.id, function(err, foundList){
+    if(err){
+      console.log(err);
+    } else{
+      List.find({}, function(err,allLists){
+        if (err) {
+          console.log(err);
+        } else{
+          allLists = allLists.map(function(list){
+            return {_id: list._id, listTitle: list.listTitle}
+          })
+          res.render('show', {lists: allLists, list: foundList});
+        }
+      });
+    }
+  });
+});
+
+
+//////////////////////////////////////////////
+
 
 app.set('port', (process.env.PORT || 3000));
 app.listen(app.get('port'), function(){
